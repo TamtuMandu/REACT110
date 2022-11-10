@@ -44,22 +44,32 @@ function generateUsers () {
 }  
 
 function App() {
-  const [users, setUsers] = useState(generateUsers().slice(0,10));
+  const [users, setUsers] = useState([]);
   
  
   useEffect(() => {
-    document.title = `${users.length} users left`;
-  });
+    setUsers(generateUsers());
+  },[]);
 
+  useEffect(() => {
+  document.title = `${users.length} users left`;
+  },[users]);
+
+  const onRemoveUser = () => {
+    setUsers((prevUsers) => {
+      const index = Math.floor(Math.random() * prevUsers.length);
+      const newUsersArray = prevUsers.filter((_, ind) => ind !== index);
+      return newUsersArray;
+    });
+  };
 return (
-  <>
-  <button onClick={() => 
-  setUsers((prevUsers) => prevUsers.slice(1))}>
-   Delete User
-  </button>
-
-  <Users users={users}/>
-  </>
+  <div className="App">
+  <button onClick={onRemoveUser}>Delete User</button>
+  {users.map(({id, name})=> (
+    <h1 key={id}>{name}</h1>
+   
+  ))};
+    </div>
 )
   // return (
   //   <div className="App">
